@@ -639,7 +639,7 @@ function _site_map_taxonomy_tree($machine_name, $name = NULL, $description = NUL
     // Display the $term.
     $output .= "\n<li>";
     $term_item = '';
-    if ($forum_link) {
+    if (isset($forum_link)) {
       $term_item .= l($term->name, 'forum/' . $term->tid, array('attributes' => array('title' => $term->description)));
     }
     elseif ($link_empty || $term->count) {
