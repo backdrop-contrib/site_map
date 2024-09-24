@@ -53,6 +53,7 @@ Current Maintainers
 -------------------
 
 - Jen Lampton (https://github.com/jenlampton).
+- Alan Mels (https://github.com/alanmels).
 - Seeking additional maintainers.
 
 
