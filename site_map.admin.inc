@@ -108,7 +108,7 @@ function site_map_admin_settings_form() {
   if (module_exists('taxonomy')) {
     foreach (taxonomy_get_vocabularies() as $vocabulary) {
       $vocab_options[$vocabulary->machine_name] = $vocabulary->name;
-      if ($vocab_defaults[$vocabulary->machine_name]) {
+      if (isset($vocab_defaults[$vocabulary->machine_name])) {
         $site_map_ordering['vocabularies_' . $vocabulary->machine_name] = $vocabulary->name;
       }
     }

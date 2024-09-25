@@ -6,24 +6,39 @@
     "page_title": "Site map",
     "message": {
         "value": "",
-        "format": "2"
+        "format": "filtered_html"
     },
     "show_front": 1,
     "show_titles": 1,
     "show_blogs": 0,
     "show_books": [],
     "books_expanded": 1,
-    "show_menus": [],
+    "show_menus": {
+        "user-menu": "user-menu",
+        "main-menu": "main-menu",
+        "management": 0
+    },
     "show_menus_hidden": 0,
     "show_faq": 0,
-    "show_vocabularies": [],
-    "order": [],
+    "show_vocabularies": {
+        "tags": "tags",
+    },
+    "order": {
+        "front": "-50",
+        "menus_user-menu": "-50",
+        "menus_management": "-50",
+        "menus_main-menu": "-50",
+        "vocabularies_tags": "-50"
+    },
     "show_description": 1,
     "show_count": 1,
     "term_depth": "all",
     "term_threshold": "0",
     "forum_threshold": "-1",
     "rss_front": "rss.xml",
-    "show_rss_links": "1",
-    "rss_depth": "all"
+    "show_rss_links": 1,
+    "rss_depth": "all",
+    "show_node_titles": 1,
+    "link_empty": 0,
+    "categories_depth": "all"
 }
