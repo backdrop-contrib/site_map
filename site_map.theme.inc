@@ -229,7 +229,7 @@ function template_preprocess_site_map(&$variables) {
         break;
 
       case 'vocabularies':
-        $vocabulary = taxonomy_vocabulary_machine_name_load($id);
+        $vocabulary = taxonomy_vocabulary_load($id);
         $vocabularies = $config->get('show_vocabularies');
         if (!empty($vocabularies[$vocabulary->machine_name])) {
           $variables['site_map'] .= _site_map_taxonomys($vocabulary);
