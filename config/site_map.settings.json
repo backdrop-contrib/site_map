@@ -21,13 +21,15 @@
     "show_menus_hidden": 0,
     "show_faq": 0,
     "show_vocabularies": {
-        "tags": "tags",
+        "newsletter": 0,
+        "tags": 0
     },
     "order": {
         "front": "-50",
         "menus_user-menu": "-50",
         "menus_management": "-50",
         "menus_main-menu": "-50",
+        "vocabularies_newsletter": "-50",
         "vocabularies_tags": "-50"
     },
     "show_description": 1,
@@ -38,7 +40,7 @@
     "rss_front": "rss.xml",
     "show_rss_links": 1,
     "rss_depth": "all",
-    "show_node_titles": 1,
+    "show_node_titles": 0,
     "link_empty": 0,
     "categories_depth": "all"
 }
