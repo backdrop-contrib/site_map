@@ -85,7 +85,7 @@ function site_map_admin_settings_form() {
   $menu_options = menu_get_menus();
   $menu_defaults = $config->get('show_menus');
   foreach ($menu_options as $menu_id => $menu_title) {
-    if ($menu_defaults[$menu_id]) {
+    if (isset($menu_defaults[$menu_id])) {
       $site_map_ordering['menus_' . $menu_id] = $menu_title;
     }
   }
