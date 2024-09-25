@@ -21,7 +21,6 @@
     "show_menus_hidden": 0,
     "show_faq": 0,
     "show_vocabularies": {
-        "newsletter": 0,
         "tags": 0
     },
     "order": {
@@ -29,7 +28,6 @@
         "menus_user-menu": "-50",
         "menus_management": "-50",
         "menus_main-menu": "-50",
-        "vocabularies_newsletter": "-50",
         "vocabularies_tags": "-50"
     },
     "show_description": 1,

@@ -161,7 +161,6 @@ function site_map_block_view($delta = '') {
         $block['content'] = site_map_content();
         break;
     }
-
     return $block;
   }
 }
@@ -191,9 +190,9 @@ function site_map_content() {
  *
  * @return string
  *   Returns HTML string for front page site map.
+ * @throws Exception
  */
 function _site_map_front_page() {
-  $output = '';
   $class = array();
   $options = array();
   $title = t('Front page');
@@ -220,7 +219,7 @@ function _site_map_front_page() {
       $output = $rss_link . ' ' . $output;
     }
   }
-  _site_map_set_option($options, 'site_map_show_titles', 1, 1, 'show_titles', TRUE);
+  _site_map_set_option($options, 'show_titles', 1, 1, 'show_titles', TRUE);
 
   $class[] = 'site-map-box-front';
   $attributes = array('class' => $class);
@@ -238,6 +237,7 @@ function _site_map_front_page() {
  *
  * @return string
  *   Returns HTML string of site map for blogs.
+ * @throws Exception
  */
 function _site_map_blogs() {
   $output = '';
@@ -262,7 +262,7 @@ function _site_map_blogs() {
         $blog_link = $rss_link . ' ' . $blog_link;
       }
     }
-    _site_map_set_option($options, 'site_map_show_titles', 1, 1, 'show_titles', TRUE);
+    _site_map_set_option($options, 'show_titles', 1, 1, 'show_titles', TRUE);
 
     $blogs = array();
     $blogs[] = $blog_link;
@@ -277,7 +277,6 @@ function _site_map_blogs() {
       ->groupBy('u.uid')
       ->groupBy('u.name')
       ->orderBy('numitems', 'DESC')
-      ->orderBy('u.name', 'ASC')
       ->range(0, 10);
     $query->addTag('node_access');
     $query->distinct();
@@ -323,12 +322,13 @@ function _site_map_blogs() {
  *
  * @return string
  *   Returns HTML string of site map for audio.
+ * @throws Exception
  */
 function _site_map_audio() {
   $output = '';
   $class = array();
   $options = array();
-  $config = array();
+  $config = config('site_map.settings');
   if (module_exists('audio')) {
     $title = t('Audio');
     $output = l(t('Audio content'), 'audio');
@@ -342,7 +342,7 @@ function _site_map_audio() {
         $output = $rss_link . ' ' . $output;
       }
     }
-    _site_map_set_option($options, 'site_map_show_titles', 1, 1, 'show_titles', TRUE);
+    _site_map_set_option($options, 'show_titles', 1, 1, 'show_titles', TRUE);
 
     $class[] = 'site-map-box-audio';
     $attributes = array('class' => $class);
@@ -363,6 +363,7 @@ function _site_map_audio() {
  *
  * @return string
  *   Returns HTML string of site map for video.
+ * @throws Exception
  */
 function _site_map_video() {
   $output = '';
@@ -382,7 +383,7 @@ function _site_map_video() {
         $output = $rss_link . '  ' . $output;
       }
     }
-    _site_map_set_option($options, 'site_map_show_titles', 1, 1, 'show_titles', TRUE);
+    _site_map_set_option($options, 'show_titles', 1, 1, 'show_titles', TRUE);
 
     $class[] = 'site-map-box-video';
     $attributes = array('class' => $class);
@@ -403,6 +404,7 @@ function _site_map_video() {
  *
  * @return string
  *   Returns HTML string of site map for video.
+ * @throws Exception
  */
 function _site_map_books() {
   $output = '';
@@ -433,7 +435,7 @@ function _site_map_books() {
         }
       }
     }
-    _site_map_set_option($options, 'site_map_show_titles', 1, 1, 'show_titles', TRUE);
+    _site_map_set_option($options, 'show_titles', 1, 1, 'show_titles', TRUE);
 
     if (!$books_expanded && !empty($book_titles)) {
       $output .= theme('item_list', array('items' => $book_titles));
@@ -459,6 +461,7 @@ function _site_map_books() {
  *
  * @return string
  *   Returns HTML string of site map for menus.
+ * @throws Exception
  */
 function _site_map_menus($mid) {
   $output = '';
@@ -486,7 +489,7 @@ function _site_map_menus($mid) {
         $m_array = array('menu', 'menu', $menu['menu_name'], 'title');
         $title = i18n_string_plain($m_array, $title);
       }
-      _site_map_set_option($options, 'site_map_show_titles', 1, 1, 'show_titles', TRUE);
+      _site_map_set_option($options, 'show_titles', 1, 1, 'show_titles', TRUE);
 
       $class[] = 'site-map-box-menu';
       $class[] = 'site-map-box-menu-' . $mid;
@@ -508,15 +511,16 @@ function _site_map_menus($mid) {
  *
  * @return string
  *   Returns HTML string of site map for faq.
+ * @throws Exception
  */
 function _site_map_faq() {
   $output = '';
   $options = array();
   if (module_exists('faq')) {
-    $title = config_get('faq.settings', 'faq_title', t('Frequently Asked Questions'));
+    $title = config_get('faq.settings', 'faq_title');
     $attributes = array('class' => array('site-map-box-faq'));
     $output = faq_get_faq_list();
-    _site_map_set_option($options, 'site_map_show_titles', 1, 1, 'show_titles', TRUE);
+    _site_map_set_option($options, 'show_titles', 1, 1, 'show_titles', TRUE);
 
     $output = theme('site_map_box', array(
       'title' => $title,
@@ -532,11 +536,12 @@ function _site_map_faq() {
 /**
  * Render the latest maps for the taxonomy tree.
  *
- * @param object $voabulary
+ * @param object $vocabulary
  *   Taxonomy vocabulary.
  *
  * @return string
  *   Returns HTML string of site map for taxonomies.
+ * @throws Exception
  */
 function _site_map_taxonomys($vocabulary) {
   $output = '';
@@ -548,7 +553,7 @@ function _site_map_taxonomys($vocabulary) {
     }
 
     $output .= _site_map_taxonomy_tree($vocabulary->machine_name, $vocabulary->name, $vocabulary->description);
-    _site_map_set_option($options, 'site_map_show_titles', 1, 1, 'show_titles', TRUE);
+    _site_map_set_option($options, 'show_titles', 1, 1, 'show_titles', TRUE);
   }
 
   return $output;
@@ -566,6 +571,7 @@ function _site_map_taxonomys($vocabulary) {
  *
  * @return string
  *   A string representing a rendered tree.
+ * @throws Exception
  */
 function _site_map_taxonomy_tree($machine_name, $name = NULL, $description = NULL) {
   $output = '';
@@ -686,14 +692,13 @@ function _site_map_taxonomy_tree($machine_name, $name = NULL, $description = NUL
   $class[] = 'site-map-box-terms-' . $machine_name;
   $attributes = array('class' => $class);
 
-  $output = theme('site_map_box', array(
+  return theme('site_map_box', array(
     'title' => $title,
     'content' => $output,
     'attributes' => $attributes,
     'options' => $options,
   ));
 
-  return $output;
 }
 
 /**
@@ -789,7 +794,6 @@ function _site_map_menu_tree_output($tree) {
     // Allow menu-specific theme overrides.
     $element['#theme'] = 'site_map_menu_link__' . strtr($data['link']['menu_name'], '-', '_');
     $element['#attributes']['class'] = $class;
-    $element['#title'] = $data['link']['title'];
     $element['#href'] = $data['link']['href'];
     $element['#title'] = $data['link']['title'];
 
@@ -823,7 +827,7 @@ function _site_map_menu_tree_output($tree) {
 }
 
 /**
- * Sets options based on admin input parameters for redering.
+ * Sets options based on admin input parameters for rendering.
  *
  * @param array $options
  *   The array of options to the site map theme.
@@ -836,10 +840,10 @@ function _site_map_menu_tree_output($tree) {
  * @param string $set_string
  *   Index of option to set, or the option name.
  * @param bool $set_value
- *   The option, on or off, or strings or ints for other options.
+ *   The option, on or off, or strings or integers for other options.
  */
 function _site_map_set_option(&$options, $option_string, $get_param, $equal_param, $set_string, $set_value) {
-  if (config_get('site_map.settings', $option_string, $get_param) == $equal_param) {
+  if (config_get('site_map.settings', $option_string) == $equal_param) {
     $options[$set_string] = $set_value;
   }
 }
