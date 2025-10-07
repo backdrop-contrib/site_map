@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Site map theme functions.
@@ -169,19 +170,20 @@ function theme_site_map_menu_link(array $variables) {
 function template_preprocess_site_map(&$variables) {
   $config = config('site_map.settings');
   $message = $config->get('message');
-  if (!empty($message)) {
+  if (!empty($message['value'])) {
     $variables['message'] = check_markup($message['value'], $message['format']);
   }
 
-  if (($config->get('show_rss_links', 1) != 0) && module_exists('commentrss')
-      && config_get('commentrss.settings', 'commentrss_site', COMMENTRSS_SITE_FRONT_PAGE)) {
+  if ($config->get('show_rss_links') != 0) {
     $variables['rss_legend'] = theme('site_map_rss_legend');
   }
 
+  // dpm($config);
   $variables['show_titles'] = $config->get('show_titles');
-  $variables['site_map'] = '';
   $site_map_order = $config->get('order');
   asort($site_map_order);
+
+  $variables['site_map'] = '';
 
   foreach ($site_map_order as $content => $weight) {
     // Get type of content.
@@ -195,20 +197,26 @@ function template_preprocess_site_map(&$variables) {
     switch ($type) {
       case 'front':
         if ($config->get('show_front')) {
-          $variables['site_map'] .= _site_map_front_page();
+          $content = _site_map_front_page();
+          $variables['front_page'] .= $content;
+          $variables['site_map'] .= $content;
         }
         break;
 
       case 'blogs':
         if ($config->get('show_blogs')) {
-          $variables['site_map'] .= _site_map_blogs();
+          $content = _site_map_blogs();
+          $variables['blogs'] .= $content;
+          $variables['site_map'] .= $content;
         }
         break;
 
       case 'books':
         $books = $config->get('show_books');
         if (!empty($books)) {
-          $variables['site_map'] .= _site_map_books();
+          $content = _site_map_books();
+          $variables['books'] .= $content;
+          $variables['site_map'] .= $content;
         }
         break;
 
@@ -218,13 +226,17 @@ function template_preprocess_site_map(&$variables) {
         // Allow other modules to alter it.
         backdrop_alter('site_map_menu_list', $menus);
         if (!empty($menus[$id])) {
-          $variables['site_map'] .= _site_map_menus($id);
+          $content = _site_map_menus($id);
+          $variables['menus'] .= $content;
+          $variables['site_map'] .= $content;
         }
         break;
 
       case 'faq':
         if ($config->get('show_faq')) {
-          $variables['site_map'] .= _site_map_faq();
+          $content = _site_map_faq();
+          $variables['faq'] .= $content;
+          $variables['site_map'] .= $content;
         }
         break;
 
@@ -232,7 +244,9 @@ function template_preprocess_site_map(&$variables) {
         $vocabulary = taxonomy_vocabulary_load($id);
         $vocabularies = $config->get('show_vocabularies');
         if (!empty($vocabularies[$vocabulary->machine_name])) {
-          $variables['site_map'] .= _site_map_taxonomys($vocabulary);
+          $content = _site_map_taxonomies($vocabulary);
+          $variables['taxonomies'] .= $content;
+          $variables['site_map'] .= $content;
         }
         break;
     }
@@ -243,6 +257,8 @@ function template_preprocess_site_map(&$variables) {
   foreach ($additional as $themed_site_map_code) {
     $variables['additional'] .= $themed_site_map_code;
   }
+
+  $variables['site_map'] .= $variables['additional'];
 }
 
 /**

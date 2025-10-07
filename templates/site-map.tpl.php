@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Theme implementation to display the site map.
@@ -11,7 +12,7 @@
  * - $books:
  * - $menus:
  * - $faq:
- * - $taxonomys:
+ * - $taxonomies:
  * - $additional:
  * - $classes:
  *
